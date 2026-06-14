@@ -714,7 +714,10 @@ async function translateDoc() {
     for (const s of sents) {
       const res = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'anthropic-dangerous-direct-browser-access': 'true'
+        },
         body: JSON.stringify({
           model: 'claude-sonnet-4-6', max_tokens: 300,
           messages: [{ role: 'user', content: '다음 영어 문장을 자연스러운 한국어로 번역해줘. 번역문만 출력해: ' + s }]
