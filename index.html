@@ -712,35 +712,17 @@ async function translateDoc() {
   try {
     const results = [];
     for (const s of sents) {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'anthropic-dangerous-direct-browser-access': 'true'
-        },
-        body: JSON.stringify({
-          model: 'claude-sonnet-4-6', max_tokens: 300,
-          messages: [{ role: 'user', content: '다음 영어 문장을 자연스러운 한국어로 번역해줘. 번역문만 출력해: ' + s }]
-        })
-      });
+      const res = await fetch('https://api.mymemory.translated.net/get?q=' + encodeURIComponent(s) + '&langpair=en|ko');
       const data = await res.json();
-      console.log('번역 응답:', JSON.stringify(data));
-      if (!res.ok) {
-        box.textContent = '오류: ' + (data.error?.message || res.status);
-        box.classList.remove('loading');
-        btn.disabled = false; btn.innerHTML = '<i class="ti ti-language"></i>한국어 번역';
-        return;
-      }
-      const text = data.content?.[0]?.text?.trim() || '';
-      results.push(text);
+      results.push(data.responseData?.translatedText || s);
     }
     doc.translation = results.join(' ');
     doc.translationArr = results;
     saveData();
-    box.textContent = doc.translation || '(번역 결과 없음)';
+    box.textContent = doc.translation;
     box.classList.remove('loading');
   } catch(err) {
-    box.textContent = '번역 실패: ' + err.message;
+    box.textContent = '번역 실패. 다시 시도해주세요.';
     box.classList.remove('loading');
   }
   btn.disabled = false; btn.innerHTML = '<i class="ti ti-language"></i>한국어 번역';
