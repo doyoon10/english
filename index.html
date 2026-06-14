@@ -470,11 +470,13 @@ function esc(t) { return String(t).replace(/&/g,'&amp;').replace(/</g,'&lt;').re
 // ── SENTENCES ──
 function parseSentences(text) {
   if (!text || !text.trim()) return [];
-  // Mask punctuation inside quotes
+  // 1) 따옴표 안의 .!? 를 임시 문자로 대체
   const masked = text.replace(/"[^"]*"/g, m => m.replace(/[.!?]/g, '\x01'));
-  const matches = masked.match(/[^.!?]+[.!?]+['"'"\]\)】]*/g) || [];
+  // 2) 문장 끝 구두점 + 바로 뒤 닫는 따옴표까지 한 문장으로
+  const re = /[^.!?]*[.!?]["']?/g;
+  const matches = masked.match(re) || [];
   const sents = matches.map(s => s.replace(/\x01/g, '.').trim()).filter(s => s.length > 1);
-  const rest = masked.replace(/[^.!?]+[.!?]+['"'"\]\)】]*/g, '').replace(/\x01/g, '.').trim();
+  const rest = masked.replace(re, '').replace(/\x01/g, '.').trim();
   if (rest.length > 1) sents.push(rest);
   return sents;
 }
