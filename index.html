@@ -724,15 +724,23 @@ async function translateDoc() {
         })
       });
       const data = await res.json();
-      results.push(data.content?.[0]?.text?.trim() || '');
+      console.log('번역 응답:', JSON.stringify(data));
+      if (!res.ok) {
+        box.textContent = '오류: ' + (data.error?.message || res.status);
+        box.classList.remove('loading');
+        btn.disabled = false; btn.innerHTML = '<i class="ti ti-language"></i>한국어 번역';
+        return;
+      }
+      const text = data.content?.[0]?.text?.trim() || '';
+      results.push(text);
     }
     doc.translation = results.join(' ');
     doc.translationArr = results;
     saveData();
-    box.textContent = doc.translation;
+    box.textContent = doc.translation || '(번역 결과 없음)';
     box.classList.remove('loading');
   } catch(err) {
-    box.textContent = '번역 실패. 다시 시도해주세요.';
+    box.textContent = '번역 실패: ' + err.message;
     box.classList.remove('loading');
   }
   btn.disabled = false; btn.innerHTML = '<i class="ti ti-language"></i>한국어 번역';
