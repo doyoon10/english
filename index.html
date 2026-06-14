@@ -139,7 +139,7 @@
   .editor-toolbar .spacer { flex: 1; }
   .folder-select { padding: 7px 12px; border-radius: var(--radius-sm); border: 0.5px solid var(--border-md); background: var(--surface); color: var(--text2); font-size: 13px; cursor: pointer; font-family: inherit; outline: none; transition: all 0.15s; }
   .folder-select:hover { background: var(--surface2); }
-  .body-textarea { width: 100%; min-height: 280px; padding: 18px; border: 0.5px solid var(--border); border-radius: var(--radius); font-size: 15px; line-height: 1.9; resize: vertical; background: var(--surface); color: var(--text); font-family: inherit; outline: none; transition: border-color 0.15s; }
+  .body-textarea { width: 100%; min-height: 280px; padding: 18px; border: 0.5px solid var(--border); border-radius: var(--radius); font-size: 15px; line-height: 1.9; resize: vertical; background: var(--surface); color: var(--text); font-family: inherit; outline: none; transition: border-color 0.15s; -webkit-user-select: text; user-select: text; }
   .body-textarea:focus { border-color: var(--border-md); }
   .body-textarea::placeholder { color: var(--text3); }
   .editor-footer { display: flex; align-items: center; justify-content: space-between; }
@@ -243,7 +243,7 @@
     border-radius: var(--radius); padding: 12px;
     box-shadow: 0 6px 24px rgba(0,0,0,0.15); width: 260px;
   }
-  .hl-panel.hidden { display: none; }
+  .hl-panel.hidden { display: none; pointer-events: none; }
   .hl-panel-top { display: flex; align-items: center; gap: 6px; margin-bottom: 10px; }
   .hl-color-btn { width: 22px; height: 22px; border-radius: 50%; border: 2px solid transparent; cursor: pointer; transition: transform 0.1s; flex-shrink: 0; }
   .hl-color-btn:hover { transform: scale(1.2); }
@@ -866,8 +866,16 @@ let selectedHlClass = 'hl-yellow';
 
 document.addEventListener('mouseup', e => {
   if (e.target.closest('#hlPanel') || e.target.closest('.memo-tooltip')) return;
+
+  // textarea나 input 클릭시 무시
+  const tag = e.target.tagName;
+  if (tag === 'TEXTAREA' || tag === 'INPUT') return;
+
   const memorizeScreen = document.getElementById('memorizeScreen');
   if (!memorizeScreen.classList.contains('active')) { closeHlPanel(); return; }
+
+  // read 탭이 활성화 상태일 때만
+  if (!document.getElementById('readTab').classList.contains('active')) return;
 
   const sel = window.getSelection();
   if (!sel || sel.isCollapsed) { closeHlPanel(); return; }
