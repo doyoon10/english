@@ -678,7 +678,7 @@ function autoWidthBlank(el) {
 
 /* Tab/Enter → 다음 빈칸으로 이동 */
 function blankKeyNav(e, si, wi) {
-  if (e.key !== 'Tab' && e.key !== 'Enter') return;
+  if (e.key !== 'Tab' && e.key !== 'Enter' && e.key == 'Spacebar') return;
   e.preventDefault();
   const all   = [...document.querySelectorAll('.word-blank')];
   const cur   = all.findIndex(el => el.dataset.sent == si && el.dataset.word == wi);
