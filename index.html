@@ -188,6 +188,11 @@
   .score-good { background: var(--sky); color: var(--sky-text); }
   .score-bad { background: var(--red-bg); color: var(--red); }
 
+  /* ANSWER TOOLTIP */
+  .answer-tooltip { position: fixed; z-index: 9999; background: #111; color: #fff; font-size: 13px; font-weight: 500; padding: 5px 11px; border-radius: 6px; pointer-events: none; white-space: nowrap; box-shadow: 0 3px 10px rgba(0,0,0,0.25); opacity: 0; transition: opacity 0.1s; }
+  .answer-tooltip.show { opacity: 1; }
+  .word-blank.wrong { cursor: help; }
+
   /* TOAST */
   .toast { position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%) translateY(12px); background: var(--text); color: var(--bg); font-size: 13px; padding: 9px 18px; border-radius: 20px; opacity: 0; transition: all 0.25s; pointer-events: none; white-space: nowrap; z-index: 999; }
   .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
@@ -312,6 +317,7 @@
 </div>
 
 <div class="toast" id="toast"></div>
+<div class="answer-tooltip" id="answerTooltip"></div>
 
 <script>
 const LS_DOCS    = 'english_memo_docs';
@@ -805,6 +811,24 @@ function onNoneZoneDrop(e) {
 }
 
 // ── INIT ──────────────────────────────────────────────────────
+// ── ANSWER TOOLTIP ───────────────────────────────────────────
+(function() {
+  const tip = document.getElementById('answerTooltip');
+  document.addEventListener('mouseover', e => {
+    const el = e.target.closest('.word-blank.wrong');
+    if (el) { tip.textContent = '정답: ' + (el.dataset.answer || ''); tip.classList.add('show'); }
+    else tip.classList.remove('show');
+  });
+  document.addEventListener('mousemove', e => {
+    if (!e.target.closest('.word-blank.wrong')) return;
+    tip.style.left = Math.min(e.clientX + 14, window.innerWidth - 180) + 'px';
+    tip.style.top  = (e.clientY - 40) + 'px';
+  });
+  document.addEventListener('mouseout', e => {
+    if (e.target.closest('.word-blank.wrong')) tip.classList.remove('show');
+  });
+})();
+
 loadData();
 renderHome();
 </script>
