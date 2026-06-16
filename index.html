@@ -207,6 +207,10 @@
   .word-blank.correct { border-bottom-color:var(--green-text); color:var(--green-text); }
   .word-blank.wrong { border-bottom-color:var(--red); color:var(--red); background:var(--red-bg); border-radius:3px 3px 0 0; cursor:help; }
   .punct { font-size:15px; color:var(--text); }
+  .sent-block-kr { font-size:12px; color:var(--text2); margin-bottom:8px; padding:5px 8px; background:var(--sky); border-radius:var(--radius-sm); display:none; line-height:1.6; }
+  .kr-visible .sent-block-kr { display:block; }
+  .blank-sent-kr { font-size:12px; color:var(--text2); margin-bottom:6px; padding:5px 8px; background:var(--sky); border-radius:var(--radius-sm); display:none; line-height:1.6; }
+  .kr-visible .blank-sent-kr { display:block; }
   .write-actions { display:flex; justify-content:flex-end; gap:8px; margin-top:16px; }
 
   /* BLANK TAB */
@@ -351,7 +355,7 @@
   <div id="writeTab" class="memo-content">
     <div class="write-info">
       <i class="ti ti-info-circle" style="font-size:14px;vertical-align:-2px;margin-right:4px"></i>
-      빈칸에 단어를 채워보세요. 총 <strong id="writeSentTotal">0</strong>문장 · Tab/Enter/Space로 다음 칸 이동
+      빈칸에 단어를 채워보세요. 총 <strong id="writeSentTotal">0</strong>문장 · Tab/Enter로 다음 칸 이동
     </div>
     <div class="write-area" id="writeArea"></div>
     <div class="write-actions">
@@ -671,6 +675,8 @@ function switchTab(tab){
 function toggleKr(){
   krAlways=!krAlways;
   document.getElementById('readView').classList.toggle('kr-always',krAlways);
+  document.getElementById('writeArea').classList.toggle('kr-visible',krAlways);
+  document.getElementById('blankArea').classList.toggle('kr-visible',krAlways);
   document.getElementById('krToggleLabel').textContent=krAlways?'번역 숨기기':'번역 항상 보기';
   document.getElementById('krToggleBtn').classList.toggle('btn-sky',krAlways);
 }
@@ -872,6 +878,7 @@ function tokenize(sent){
 
 function renderWriteTab(doc){
   const sents=parseSentences(doc.body);
+  const krs=getKrs(doc);
   document.getElementById('writeSentTotal').textContent=sents.length;
   document.getElementById('writeArea').innerHTML=sents.map((s,si)=>{
     let wi=0;
@@ -884,7 +891,8 @@ function renderWriteTab(doc){
       if(tok.type==='space')return '<span style="display:inline-block;width:5px"></span>';
       return `<span class="punct">${esc(tok.val)}</span>`;
     }).join('');
-    return `<div class="sent-block"><div class="sent-block-num">문장 ${si+1}</div><div class="sent-block-line">${parts}</div></div>`;
+    const krText=krs[si]||'';
+    return `<div class="sent-block"><div class="sent-block-num">문장 ${si+1}</div>${krText?`<div class="sent-block-kr">${esc(krText)}</div>`:''}<div class="sent-block-line">${parts}</div></div>`;
   }).join('');
   document.getElementById('resultArea').innerHTML='';
 }
@@ -968,6 +976,7 @@ function submitWrite(){
 // ── BLANK TAB ──
 function renderBlankTab(doc){
   const sents=parseSentences(doc.body);
+  const krs=getKrs(doc);
   document.getElementById('blankSentTotal').textContent=sents.length;
   document.getElementById('blankArea').innerHTML=sents.map((s,i)=>{
     const tokens=s.split(/(\s+)/);
@@ -975,7 +984,8 @@ function renderBlankTab(doc){
       if(/^\s+$/.test(tok))return tok;
       return `<span class="blank-word" data-si="${i}" data-wi="${wi}" data-word="${esc(tok)}" onclick="toggleBlank(this)">${esc(tok)}</span>`;
     }).join('');
-    return `<div class="blank-sent-row"><div class="blank-sent-label">문장 ${i+1}</div><div class="blank-sent-text">${spans}</div></div>`;
+    const krText=krs[i]||'';
+    return `<div class="blank-sent-row"><div class="blank-sent-label">문장 ${i+1}</div>${krText?`<div class="blank-sent-kr">${esc(krText)}</div>`:''}<div class="blank-sent-text">${spans}</div></div>`;
   }).join('');
   document.getElementById('blankResultArea').innerHTML='';
 }
