@@ -251,14 +251,10 @@
   /* TOAST */
   .toast { position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(12px); background:var(--text); color:var(--bg); font-size:13px; padding:9px 18px; border-radius:20px; opacity:0; transition:all .25s; pointer-events:none; white-space:nowrap; z-index:999; }
   .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
-  .en-hidden .read-en { color: transparent; background: var(--surface2); border-radius: 4px; user-select: none; transition: color 0.2s, background 0.2s; }
-  .en-hidden .read-row:hover .read-en { color: var(--text); background: transparent; }
-  /* 메모/하이라이트 있는 span은 항상 보이게 */
-  .en-hidden .read-en span[data-ann-id] { color: inherit !important; background: inherit; }
   /* 한 줄씩 숨기기 */
-  .read-row.row-hidden .read-en { color: transparent !important; background: var(--surface2); border-radius: 4px; user-select: none; }
-  .read-row.row-hidden:hover .read-en { color: var(--text) !important; background: transparent; }
-  .read-row.row-hidden .read-en span[data-ann-id] { color: inherit !important; background: inherit; }
+  .read-row.row-hidden .read-en { filter: blur(6px); user-select: none; transition: filter 0.2s; cursor: pointer; }
+  .read-row.row-hidden:hover .read-en { filter: blur(0px); }
+  .read-row.row-hidden .read-en span[data-ann-id] { filter: none !important; }
   .row-eye-btn { flex-shrink:0; background:none; border:none; cursor:pointer; color:var(--text3); font-size:13px; padding:2px 4px; border-radius:4px; opacity:0; transition:opacity .15s; margin-top:2px; }
   .read-row:hover .row-eye-btn { opacity:1; }
   .row-eye-btn:hover { color:var(--text2); background:var(--border); }
@@ -353,9 +349,6 @@
       <button class="memo-tab"        id="tabBlank" onclick="switchTab('blank')"><i class="ti ti-puzzle" style="font-size:14px;vertical-align:-1px"></i> 빈칸 채우기</button>
     </div>
     <div style="display:flex;gap:8px">
-      <button class="btn" id="enToggleBtn" onclick="toggleEn()">
-        <i class="ti ti-eye"></i><span id="enToggleLabel">영어 숨기기</span>
-      </button>
       <button class="btn" id="krToggleBtn" onclick="toggleKr()">
         <i class="ti ti-language"></i><span id="krToggleLabel">번역 항상 보기</span>
       </button>
@@ -682,8 +675,6 @@ function goMemorize(){
   krAlways=false;
   document.getElementById('krToggleLabel').textContent='번역 항상 보기';
   document.getElementById('krToggleBtn').classList.remove('btn-sky');
-  document.getElementById('enToggleLabel').textContent='영어 숨기기';
-  document.getElementById('enToggleBtn').classList.remove('btn-sky');
   renderReadTab(doc);renderWriteTab(doc);renderBlankTab(doc);
   switchTab('read');showScreen('memorizeScreen');
 }
@@ -694,12 +685,6 @@ function switchTab(tab){
     document.getElementById('tab'+T).classList.toggle('active',t===tab);
     document.getElementById(t+'Tab').classList.toggle('active',t===tab);
   });
-}
-
-function toggleEn(){
-  const hidden=document.getElementById('readView').classList.toggle('en-hidden');
-  document.getElementById('enToggleLabel').textContent=hidden?'영어 보이기':'영어 숨기기';
-  document.getElementById('enToggleBtn').classList.toggle('btn-sky',hidden);
 }
 
 function toggleKr(){
