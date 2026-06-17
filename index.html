@@ -902,10 +902,18 @@ function autoWidthBlank(el){
   el.style.width=Math.max(len*10+8,28)+'px';
 }
 function blankKeyNav(e,si,wi){
-  if(e.key!=='Tab'&&e.key!=='Enter'&&e.key!==' ')return;
-  e.preventDefault();
   const all=[...document.querySelectorAll('.word-blank')];
   const cur=all.findIndex(el=>el.dataset.sent==si&&el.dataset.word==wi);
+  if(e.key==='Backspace'||e.key==='ArrowLeft'){
+    if(e.target.value===''||(e.key==='ArrowLeft'&&e.target.selectionStart===0)){
+      e.preventDefault();
+      const prev=all[cur-1];
+      if(prev){prev.focus();prev.setSelectionRange(prev.value.length,prev.value.length);}
+    }
+    return;
+  }
+  if(e.key!=='Tab'&&e.key!=='Enter'&&e.key!==' ')return;
+  e.preventDefault();
   const next=all[cur+(e.shiftKey?-1:1)];
   if(next)next.focus();
 }
@@ -994,7 +1002,25 @@ function toggleBlank(span){
   const word=span.dataset.word;
   span.classList.add('blanked');
   const w=Math.max(word.length*0.7,3).toFixed(1);
-  span.innerHTML=`<input type="text" style="width:${w}em" spellcheck="false" onclick="event.stopPropagation()">`;
+  span.innerHTML=`<input type="text" style="width:${w}em" spellcheck="false" onclick="event.stopPropagation()" onkeydown="blankInputKeyNav(event,this)">`;
+}
+
+function blankInputKeyNav(e,el){
+  const all=[...document.querySelectorAll('.blank-word.blanked input')];
+  const cur=all.indexOf(el);
+  if(e.key==='Backspace'||e.key==='ArrowLeft'){
+    if(el.value===''||(e.key==='ArrowLeft'&&el.selectionStart===0)){
+      e.preventDefault();
+      const prev=all[cur-1];
+      if(prev){prev.focus();prev.setSelectionRange(prev.value.length,prev.value.length);}
+    }
+    return;
+  }
+  if(e.key==='Tab'||e.key==='Enter'){
+    e.preventDefault();
+    const next=all[cur+(e.shiftKey?-1:1)];
+    if(next)next.focus();
+  }
 }
 function autoBlankRandom(){
   const doc=docs.find(d=>d.id===currentId);if(doc)renderBlankTab(doc);
