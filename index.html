@@ -253,6 +253,16 @@
   .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
   .en-hidden .read-en { color: transparent; background: var(--surface2); border-radius: 4px; user-select: none; transition: color 0.2s, background 0.2s; }
   .en-hidden .read-row:hover .read-en { color: var(--text); background: transparent; }
+  /* 메모/하이라이트 있는 span은 항상 보이게 */
+  .en-hidden .read-en span[data-ann-id] { color: inherit !important; background: inherit; }
+  /* 한 줄씩 숨기기 */
+  .read-row.row-hidden .read-en { color: transparent !important; background: var(--surface2); border-radius: 4px; user-select: none; }
+  .read-row.row-hidden:hover .read-en { color: var(--text) !important; background: transparent; }
+  .read-row.row-hidden .read-en span[data-ann-id] { color: inherit !important; background: inherit; }
+  .row-eye-btn { flex-shrink:0; background:none; border:none; cursor:pointer; color:var(--text3); font-size:13px; padding:2px 4px; border-radius:4px; opacity:0; transition:opacity .15s; margin-top:2px; }
+  .read-row:hover .row-eye-btn { opacity:1; }
+  .row-eye-btn:hover { color:var(--text2); background:var(--border); }
+  .read-row.row-hidden .row-eye-btn { opacity:1; color:var(--sky-text); }
   .divider { height:.5px; background:var(--border); margin:24px 0; }
 </style>
 </head>
@@ -722,6 +732,7 @@ function renderReadTab(doc){
           <button class="kr-edit-btn" onclick="editKr(${i})" title="번역 수정"><i class="ti ti-pencil"></i></button>
         </div>
       </div>
+      <button class="row-eye-btn" onclick="toggleRowHide(${i})" title="이 문장 숨기기"><i class="ti ti-eye"></i></button>
     </div>`;
   }).join('');
   if(krAlways)document.getElementById('readView').classList.add('kr-always');
@@ -745,6 +756,14 @@ function buildEnHtml(sentence,sentIdx,doc){
     }else{result+=esc(sentence[i]);i++;}
   }
   return result;
+}
+
+function toggleRowHide(idx){
+  const row=document.querySelector(`.read-row[data-sent-idx="${idx}"]`);
+  if(!row)return;
+  const hidden=row.classList.toggle('row-hidden');
+  const btn=row.querySelector('.row-eye-btn i');
+  if(btn)btn.className=hidden?'ti ti-eye-off':'ti ti-eye';
 }
 
 // ── KR EDIT ──
