@@ -390,12 +390,13 @@
   <!-- BLANK -->
   <div id="blankTab" class="memo-content">
     <div class="write-info">
-      <i class="ti ti-puzzle" style="font-size:14px;vertical-align:-2px;margin-right:4px"></i>
-      단어를 클릭해 빈칸으로 만들고 채워보세요. 총 <strong id="blankSentTotal">0</strong>문장
-      <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap">
-        <button class="btn btn-sky" onclick="autoBlankRandom()"><i class="ti ti-dice"></i>랜덤 빈칸</button>
-        <button class="btn" onclick="resetBlanks()"><i class="ti ti-refresh"></i>초기화</button>
-        <button class="btn btn-dark" onclick="checkBlanks()"><i class="ti ti-send"></i>채점하기</button>
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+        <span><i class="ti ti-puzzle" style="font-size:14px;vertical-align:-2px;margin-right:4px"></i>단어를 클릭해 빈칸으로 만들고 채워보세요. 총 <strong id="blankSentTotal">0</strong>문장</span>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <button class="btn btn-sky" onclick="autoBlankRandom()"><i class="ti ti-dice"></i>랜덤 빈칸</button>
+          <button class="btn" onclick="resetBlanks()"><i class="ti ti-refresh"></i>초기화</button>
+          <button class="btn btn-dark" onclick="checkBlanks()"><i class="ti ti-send"></i>채점하기</button>
+        </div>
       </div>
     </div>
     <div id="blankArea"></div>
