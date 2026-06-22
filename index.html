@@ -376,8 +376,13 @@
   <!-- WRITE -->
   <div id="writeTab" class="memo-content">
     <div class="write-info">
-      <i class="ti ti-info-circle" style="font-size:14px;vertical-align:-2px;margin-right:4px"></i>
-      빈칸에 단어를 채워보세요. 총 <strong id="writeSentTotal">0</strong>문장 · Tab/Enter로 다음 칸 이동
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+        <span><i class="ti ti-info-circle" style="font-size:14px;vertical-align:-2px;margin-right:4px"></i>빈칸에 단어를 채워보세요. 총 <strong id="writeSentTotal">0</strong>문장 · Tab/Enter로 다음 칸 이동</span>
+        <div style="display:flex;gap:6px">
+          <button class="btn" onclick="resetWrite()"><i class="ti ti-refresh"></i>초기화</button>
+          <button class="btn btn-dark" onclick="submitWrite()"><i class="ti ti-send"></i>채점하기</button>
+        </div>
+      </div>
     </div>
     <div class="write-area" id="writeArea"></div>
     <div class="write-actions">
