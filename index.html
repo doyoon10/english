@@ -281,6 +281,20 @@
   .toast { position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(12px); background:var(--text); color:var(--bg); font-size:13px; padding:9px 18px; border-radius:20px; opacity:0; transition:all .25s; pointer-events:none; white-space:nowrap; z-index:999; }
   .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
   .hl-memo-edit:empty:before { content:attr(data-placeholder); color:var(--text3); pointer-events:none; }
+  /* 전체 가리기 */
+  .en-hidden .read-en { filter:blur(6px); user-select:none; transition:filter 0.2s; cursor:pointer; }
+  .en-hidden .read-row:hover .read-en { filter:blur(0px); }
+  .en-hidden .read-en span[data-ann-id] { filter:none !important; }
+  .en-hidden .read-row.row-revealed .read-en { filter:none !important; }
+  /* 문장별 가리기 */
+  .read-row.row-hidden .read-en { filter:blur(6px); user-select:none; transition:filter 0.2s; cursor:pointer; }
+  .read-row.row-hidden:hover .read-en { filter:blur(0px); }
+  .read-row.row-hidden .read-en span[data-ann-id] { filter:none !important; }
+  .row-eye-btn { flex-shrink:0; background:none; border:none; cursor:pointer; color:var(--text3); font-size:13px; padding:2px 4px; border-radius:4px; opacity:0; transition:opacity .15s; margin-top:2px; }
+  .read-row:hover .row-eye-btn { opacity:1; }
+  .row-eye-btn:hover { color:var(--text2); background:var(--border); }
+  .read-row.row-hidden .row-eye-btn, .read-row.row-revealed .row-eye-btn { opacity:1; color:var(--sky-text); }
+  .en-hidden .row-eye-btn { opacity:1; }
   .divider { height:.5px; background:var(--border); margin:24px 0; }
 </style>
 </head>
@@ -371,9 +385,14 @@
       <button class="memo-tab"        id="tabBlank" onclick="switchTab('blank')"><i class="ti ti-puzzle" style="font-size:14px;vertical-align:-1px"></i> 빈칸 채우기</button>
       <button class="memo-tab"        id="tabTrans" onclick="switchTab('trans')"><i class="ti ti-language" style="font-size:14px;vertical-align:-1px"></i> 해석 쓰기</button>
     </div>
-    <button class="btn" id="krToggleBtn" onclick="toggleKr()">
-      <i class="ti ti-language"></i><span id="krToggleLabel">번역 항상 보기</span>
-    </button>
+    <div style="display:flex;gap:8px">
+      <button class="btn" id="enToggleBtn" onclick="toggleEn()">
+        <i class="ti ti-eye-off"></i><span id="enToggleLabel">전체 가리기</span>
+      </button>
+      <button class="btn" id="krToggleBtn" onclick="toggleKr()">
+        <i class="ti ti-language"></i><span id="krToggleLabel">번역 항상 보기</span>
+      </button>
+    </div>
   </div>
 
   <!-- READ -->
@@ -460,7 +479,7 @@
     <div class="hl-sep"></div>
     <button class="hl-erase-btn" onclick="eraseHL()"><i class="ti ti-eraser" style="font-size:12px"></i>지우기</button>
   </div>
-  <div class="hl-memo-hint">메모 · <b>Ctrl+B</b> 굵게</div>
+  <div class="hl-memo-hint"><button class="btn" style="padding:3px 8px;font-size:11px" onclick="speakSelected()"><i class="ti ti-volume" style="font-size:13px"></i>발음</button> · <b>Ctrl+B</b> 굵게</div>
   <div class="hl-memo-edit" id="hlMemoInput" contenteditable="true" data-placeholder="메모 입력 (선택사항)"></div>
   <div class="hl-panel-actions">
     <button class="btn" onclick="closeHlPanel()">취소</button>
@@ -714,6 +733,9 @@ function goMemorize(){
   krAlways=false;
   document.getElementById('krToggleLabel').textContent='번역 항상 보기';
   document.getElementById('krToggleBtn').classList.remove('btn-sky');
+  document.getElementById('enToggleLabel').textContent='전체 가리기';
+  document.getElementById('enToggleBtn').classList.remove('btn-sky');
+  document.getElementById('readView')?.classList.remove('en-hidden');
   renderReadTab(doc);renderWriteTab(doc);renderBlankTab(doc);renderTransTab(doc);
   switchTab('read');showScreen('memorizeScreen');
 }
@@ -724,6 +746,26 @@ function switchTab(tab){
     document.getElementById('tab'+T).classList.toggle('active',t===tab);
     document.getElementById(t+'Tab').classList.toggle('active',t===tab);
   });
+}
+
+function toggleEn(){
+  const hidden=document.getElementById('readView').classList.toggle('en-hidden');
+  document.getElementById('enToggleLabel').textContent=hidden?'전체 보이기':'전체 가리기';
+  document.getElementById('enToggleBtn').classList.toggle('btn-sky',hidden);
+}
+
+function toggleRowHide(idx){
+  const row=document.querySelector(`.read-row[data-sent-idx="${idx}"]`);
+  if(!row)return;
+  const enHidden=document.getElementById('readView').classList.contains('en-hidden');
+  const btn=row.querySelector('.row-eye-btn i');
+  if(enHidden){
+    const revealed=row.classList.toggle('row-revealed');
+    if(btn)btn.className=revealed?'ti ti-eye-off':'ti ti-eye';
+  }else{
+    const hidden=row.classList.toggle('row-hidden');
+    if(btn)btn.className=hidden?'ti ti-eye-off':'ti ti-eye';
+  }
 }
 
 function toggleKr(){
@@ -756,6 +798,7 @@ function renderReadTab(doc){
           <button class="kr-edit-btn" onclick="editKr(${i})" title="번역 수정"><i class="ti ti-pencil"></i></button>
         </div>
       </div>
+      <button class="row-eye-btn" onclick="toggleRowHide(${i})"><i class="ti ti-eye"></i></button>
     </div>`;
   }).join('');
   if(krAlways)document.getElementById('readView').classList.add('kr-always');
@@ -861,7 +904,7 @@ function buildEnHtml(sentence, sentIdx, doc){
     // 이 토큰에 걸친 annotation 찾기
     const ann=anns.find(a=>a.start<=tok.start&&a.end>=tok.end);
     const isWord=/\w/.test(tok.text);
-    const wordAttr=isWord?` class="word" data-si="${sentIdx}" data-start="${tok.start}" data-end="${tok.end}" data-word="${esc(tok.text)}" onclick="onWordClick(event,${sentIdx},${tok.start},${tok.end},'${esc(tok.text)}')"  ondblclick="speakWord('${esc(tok.text)}')" title="더블클릭으로 발음"`:' ';
+    const wordAttr=isWord?` class="word" data-si="${sentIdx}" data-start="${tok.start}" data-end="${tok.end}" data-word="${esc(tok.text)}" onclick="onWordClick(event,${sentIdx},${tok.start},${tok.end},'${esc(tok.text)}')"`:'';
     if(ann){
       const cls=[ann.hlClass,ann.memo?'memo-span':'',!ann.hlClass&&ann.memo?'memo-only':''].filter(Boolean).join(' ');
       const memoAttr=ann.memo?` data-memo="${ann.memo.replace(/&/g,'&amp;').replace(/"/g,'&quot;')}"`:'';
@@ -924,6 +967,13 @@ function onWordClick(e, si, start, end, word){
 function clearWordSelection(){
   selectedWords.forEach(w=>w.el?.classList.remove('word-selected'));
   selectedWords=[];
+}
+
+function speakSelected(){
+  const doc=docs.find(d=>d.id===currentId);if(!doc||!hlSelection)return;
+  const sents=parseSentences(doc.body);
+  const text=sents[hlSelection.sentIdx]?.slice(hlSelection.start,hlSelection.end)||'';
+  if(text)speakWord(text);
 }
 
 // TTS
