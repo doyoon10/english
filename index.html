@@ -1091,6 +1091,7 @@ function resetTrans(){
     const el=document.getElementById('transInput_'+i);
     if(el){el.value='';el.style.height='auto';}
   });
+  document.querySelectorAll('.trans-result').forEach(el=>el.remove());
   document.getElementById('transResultArea').innerHTML='';
 }
 
@@ -1098,18 +1099,19 @@ function submitTrans(){
   const doc=docs.find(d=>d.id===currentId);if(!doc)return;
   const sents=parseSentences(doc.body);
   const krs=getKrs(doc);
-  const rows=sents.map((s,i)=>{
-    const inp=(document.getElementById('transInput_'+i)?.value||'').trim();
+  sents.forEach((s,i)=>{
+    const block=document.getElementById('transInput_'+i)?.closest('.sent-block');
+    if(!block)return;
+    const existing=block.querySelector('.trans-result');
+    if(existing)existing.remove();
     const krText=krs[i]||'';
-    return `<div class="result-item">
-      <div class="sent-block-num" style="margin-bottom:8px">문장 ${i+1}</div>
-      <div style="font-size:14px;line-height:1.8;margin-bottom:6px">${esc(s)}</div>
-      <div style="font-size:13px;line-height:1.7;padding:8px 10px;background:var(--surface2);border-radius:var(--radius-sm);margin-bottom:${krText?'6px':'0'};white-space:pre-wrap">${inp||'<span style="color:var(--text3);font-style:italic">입력 없음</span>'}</div>
-      ${krText?`<div class="result-original">번역: ${esc(krText)}</div>`:''}
-    </div>`;
-  }).join('');
-  document.getElementById('transResultArea').innerHTML=`<div class="result-list" style="margin-top:20px">${rows}</div>`;
-  document.getElementById('transResultArea').scrollIntoView({behavior:'smooth',block:'start'});
+    const div=document.createElement('div');
+    div.className='trans-result';
+    div.style.cssText='margin-top:8px;padding:8px 10px;background:var(--surface2);border-radius:var(--radius-sm);font-size:13px;line-height:1.7;color:var(--text2);border-left:2px solid var(--border-md)';
+    div.innerHTML=esc(s)+(krText?`<div style="margin-top:4px;color:var(--text3);font-size:12px">${esc(krText)}</div>`:'');
+    block.appendChild(div);
+  });
+  document.getElementById('transResultArea').innerHTML='';
 }
 
 // ── DRAG & DROP ──
