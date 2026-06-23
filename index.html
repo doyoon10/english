@@ -164,32 +164,61 @@
   .kr-edit-textarea:focus { border-color:var(--sky-text); }
   .kr-edit-actions { display:flex; gap:6px; justify-content:flex-end; }
 
-  /* HIGHLIGHT */
+  /* HIGHLIGHT COLORS */
   .hl-yellow { background:#ffe066; border-radius:3px; padding:0 1px; color:#7a5500; }
   .hl-green  { background:#b6f5c8; border-radius:3px; padding:0 1px; color:#166534; }
   .hl-blue   { background:#bae0ff; border-radius:3px; padding:0 1px; color:#0c4a6e; }
   .hl-pink   { background:#fbc8e0; border-radius:3px; padding:0 1px; color:#7c1d4e; }
+  .hl-orange { background:#fed7aa; border-radius:3px; padding:0 1px; color:#7c2d12; }
+  .hl-purple { background:#e9d5ff; border-radius:3px; padding:0 1px; color:#581c87; }
+  .hl-red    { background:#fecaca; border-radius:3px; padding:0 1px; color:#7f1d1d; }
+  .hl-teal   { background:#99f6e4; border-radius:3px; padding:0 1px; color:#134e4a; }
   @media (prefers-color-scheme:dark){
     .hl-yellow { background:#7a5500; color:#ffe066; }
     .hl-green  { background:#14532d; color:#86efac; }
     .hl-blue   { background:#0c3254; color:#93c5fd; }
     .hl-pink   { background:#4a1030; color:#f9a8d4; }
+    .hl-orange { background:#7c2d12; color:#fed7aa; }
+    .hl-purple { background:#3b0764; color:#d8b4fe; }
+    .hl-red    { background:#7f1d1d; color:#fca5a5; }
+    .hl-teal   { background:#134e4a; color:#5eead4; }
   }
+  /* UNDERLINE STYLES */
+  .ul-yellow { border-bottom:2px solid #f59e0b; padding-bottom:1px; }
+  .ul-green  { border-bottom:2px solid #22c55e; padding-bottom:1px; }
+  .ul-blue   { border-bottom:2px solid #3b82f6; padding-bottom:1px; }
+  .ul-pink   { border-bottom:2px solid #ec4899; padding-bottom:1px; }
+  .ul-orange { border-bottom:2px solid #f97316; padding-bottom:1px; }
+  .ul-purple { border-bottom:2px solid #a855f7; padding-bottom:1px; }
+  .ul-red    { border-bottom:2px solid #ef4444; padding-bottom:1px; }
+  .ul-teal   { border-bottom:2px solid #14b8a6; padding-bottom:1px; }
   .memo-span { border-bottom:1.5px dotted var(--sky-text); cursor:pointer; }
   .memo-only { border-bottom:1.5px dotted var(--text3); cursor:pointer; }
+  /* WORD SELECTION */
+  .read-en .word { cursor:pointer; border-radius:2px; transition:background .1s; }
+  .read-en .word:hover { background:var(--surface2); }
+  .read-en .word.word-selected { background:var(--sky); color:var(--sky-text); border-radius:2px; }
+  /* TTS BUTTON */
+  .tts-btn { display:none; position:absolute; background:var(--text); color:var(--bg); border:none; border-radius:4px; font-size:11px; padding:2px 6px; cursor:pointer; z-index:50; white-space:nowrap; }
+  .tts-btn:hover { opacity:.85; }
 
   /* HIGHLIGHT PANEL */
-  .hl-panel { position:absolute; z-index:200; background:var(--surface); border:.5px solid var(--border-md); border-radius:var(--radius); padding:12px; box-shadow:0 6px 24px rgba(0,0,0,.15); width:260px; }
+  .hl-panel { position:absolute; z-index:200; background:var(--surface); border:.5px solid var(--border-md); border-radius:var(--radius); padding:12px; box-shadow:0 6px 24px rgba(0,0,0,.15); width:290px; }
   .hl-panel.hidden { display:none; pointer-events:none; }
-  .hl-panel-top { display:flex; align-items:center; gap:6px; margin-bottom:10px; }
-  .hl-color-btn { width:22px; height:22px; border-radius:50%; border:2px solid transparent; cursor:pointer; transition:transform .1s; flex-shrink:0; }
+  .hl-panel-top { display:flex; align-items:center; gap:5px; margin-bottom:8px; flex-wrap:wrap; }
+  .hl-mode-tabs { display:flex; border:.5px solid var(--border-md); border-radius:var(--radius-sm); overflow:hidden; margin-bottom:8px; }
+  .hl-mode-tab { flex:1; padding:4px 0; font-size:12px; cursor:pointer; background:var(--surface); border:none; color:var(--text2); font-family:inherit; text-align:center; transition:all .15s; }
+  .hl-mode-tab.active { background:var(--text); color:var(--bg); }
+  .hl-color-btn { width:20px; height:20px; border-radius:50%; border:2px solid transparent; cursor:pointer; transition:transform .1s; flex-shrink:0; }
   .hl-color-btn:hover { transform:scale(1.2); }
   .hl-color-btn.selected { border-color:var(--text); }
-  .hl-sep { width:.5px; height:18px; background:var(--border-md); margin:0 2px; }
+  .hl-sep { width:.5px; height:16px; background:var(--border-md); margin:0 1px; }
   .hl-erase-btn { background:none; border:.5px solid var(--border-md); border-radius:var(--radius-sm); cursor:pointer; color:var(--text2); font-size:12px; padding:3px 8px; font-family:inherit; display:flex; align-items:center; gap:3px; transition:all .1s; }
   .hl-erase-btn:hover { background:var(--red-bg); color:var(--red); }
-  .hl-panel-textarea { width:100%; border:.5px solid var(--border-md); border-radius:var(--radius-sm); padding:7px 9px; font-size:13px; font-family:inherit; line-height:1.6; background:var(--surface2); color:var(--text); resize:none; outline:none; height:60px; display:block; margin-bottom:8px; transition:border-color .15s; }
-  .hl-panel-textarea:focus { border-color:var(--sky-text); }
+  .hl-memo-edit { width:100%; border:.5px solid var(--border-md); border-radius:var(--radius-sm); padding:7px 9px; font-size:13px; font-family:inherit; line-height:1.6; background:var(--surface2); color:var(--text); outline:none; min-height:60px; display:block; margin-bottom:8px; transition:border-color .15s; }
+  .hl-memo-edit:focus { border-color:var(--sky-text); }
+  .hl-memo-edit b { font-weight:700; }
+  .hl-memo-hint { font-size:11px; color:var(--text3); margin-bottom:6px; }
   .hl-panel-actions { display:flex; justify-content:flex-end; gap:6px; }
 
   /* MEMO TOOLTIP */
@@ -251,6 +280,7 @@
   /* TOAST */
   .toast { position:fixed; bottom:28px; left:50%; transform:translateX(-50%) translateY(12px); background:var(--text); color:var(--bg); font-size:13px; padding:9px 18px; border-radius:20px; opacity:0; transition:all .25s; pointer-events:none; white-space:nowrap; z-index:999; }
   .toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+  .hl-memo-edit:empty:before { content:attr(data-placeholder); color:var(--text3); pointer-events:none; }
   .divider { height:.5px; background:var(--border); margin:24px 0; }
 </style>
 </head>
@@ -413,16 +443,25 @@
 
 <!-- 하이라이트 패널 -->
 <div class="hl-panel hidden" id="hlPanel">
-  <div class="hl-panel-top">
-    <div class="hl-color-btn" style="background:#ffe066" data-cls="hl-yellow" onclick="selectColor(this,'hl-yellow')" title="노란색"></div>
-    <div class="hl-color-btn" style="background:#b6f5c8" data-cls="hl-green"  onclick="selectColor(this,'hl-green')"  title="초록색"></div>
-    <div class="hl-color-btn" style="background:#bae0ff" data-cls="hl-blue"   onclick="selectColor(this,'hl-blue')"   title="파란색"></div>
-    <div class="hl-color-btn" style="background:#fbc8e0" data-cls="hl-pink"   onclick="selectColor(this,'hl-pink')"   title="분홍색"></div>
-    <div class="hl-color-btn" style="background:transparent;border:1.5px dashed var(--border-md);font-size:10px;display:flex;align-items:center;justify-content:center;color:var(--text2)" data-cls="" onclick="selectColor(this,'')" title="색 없이 메모만">✕</div>
+  <div class="hl-mode-tabs">
+    <button class="hl-mode-tab active" id="modeHL" onclick="setHlMode('hl')">형광펜</button>
+    <button class="hl-mode-tab" id="modeUL" onclick="setHlMode('ul')">밑줄</button>
+    <button class="hl-mode-tab" id="modeMemo" onclick="setHlMode('memo')">메모만</button>
+  </div>
+  <div class="hl-panel-top" id="hlColorRow">
+    <div class="hl-color-btn" style="background:#ffe066" data-cls="yellow" onclick="selectColor(this,'yellow')" title="노란색"></div>
+    <div class="hl-color-btn" style="background:#b6f5c8" data-cls="green"  onclick="selectColor(this,'green')"  title="초록색"></div>
+    <div class="hl-color-btn" style="background:#bae0ff" data-cls="blue"   onclick="selectColor(this,'blue')"   title="파란색"></div>
+    <div class="hl-color-btn" style="background:#fbc8e0" data-cls="pink"   onclick="selectColor(this,'pink')"   title="분홍색"></div>
+    <div class="hl-color-btn" style="background:#fed7aa" data-cls="orange" onclick="selectColor(this,'orange')" title="주황색"></div>
+    <div class="hl-color-btn" style="background:#e9d5ff" data-cls="purple" onclick="selectColor(this,'purple')" title="보라색"></div>
+    <div class="hl-color-btn" style="background:#fecaca" data-cls="red"    onclick="selectColor(this,'red')"    title="빨간색"></div>
+    <div class="hl-color-btn" style="background:#99f6e4" data-cls="teal"   onclick="selectColor(this,'teal')"   title="청록색"></div>
     <div class="hl-sep"></div>
     <button class="hl-erase-btn" onclick="eraseHL()"><i class="ti ti-eraser" style="font-size:12px"></i>지우기</button>
   </div>
-  <textarea class="hl-panel-textarea" id="hlMemoInput" placeholder="메모 입력 (선택사항)"></textarea>
+  <div class="hl-memo-hint">메모 · <b>Ctrl+B</b> 굵게</div>
+  <div class="hl-memo-edit" id="hlMemoInput" contenteditable="true" data-placeholder="메모 입력 (선택사항)"></div>
   <div class="hl-panel-actions">
     <button class="btn" onclick="closeHlPanel()">취소</button>
     <button class="btn btn-dark" onclick="saveHL()">저장</button>
@@ -776,8 +815,127 @@ function saveKr(idx){
 function cancelKr(idx){const doc=docs.find(d=>d.id===currentId);if(doc)renderReadTab(doc);}
 
 // ── HIGHLIGHT ──
-let hlSelection=null,hlAnnId=null,selectedHlClass='hl-yellow';
+let hlSelection=null, hlAnnId=null, selectedColor='yellow', hlMode='hl';
+let selectedWords=[];  // [{sentIdx, wordIdx, word}]
 
+// placeholder for contenteditable
+document.addEventListener('DOMContentLoaded',()=>{
+  const el=document.getElementById('hlMemoInput');
+  if(el){
+    el.addEventListener('focus',()=>{ if(!el.textContent.trim()) el.innerHTML=''; });
+    el.addEventListener('blur',()=>{ if(!el.textContent.trim()) el.innerHTML=''; });
+    el.addEventListener('keydown',e=>{
+      if((e.ctrlKey||e.metaKey)&&e.key==='b'){ e.preventDefault(); document.execCommand('bold'); }
+    });
+  }
+});
+
+function setHlMode(mode){
+  hlMode=mode;
+  ['HL','UL','Memo'].forEach(m=>document.getElementById('mode'+m).classList.toggle('active',mode===m.toLowerCase().replace('memo','memo')));
+  document.getElementById('modeHL').classList.toggle('active',mode==='hl');
+  document.getElementById('modeUL').classList.toggle('active',mode==='ul');
+  document.getElementById('modeMemo').classList.toggle('active',mode==='memo');
+  document.getElementById('hlColorRow').style.display=mode==='memo'?'none':'flex';
+}
+
+function getHlClass(){
+  if(hlMode==='memo')return '';
+  return (hlMode==='ul'?'ul-':'hl-')+selectedColor;
+}
+
+// 단어 단위로 read-en 렌더링
+function buildEnHtml(sentence, sentIdx, doc){
+  const anns=((doc.annotations||[]).filter(a=>a.sentIdx===sentIdx)).sort((a,b)=>a.start-b.start);
+  // 단어/공백/구두점으로 토큰화
+  const tokens=[];
+  let charIdx=0;
+  sentence.replace(/(\S+|\s+)/g,(match,_,offset)=>{
+    tokens.push({text:match, start:offset, end:offset+match.length});
+    charIdx=offset+match.length;
+  });
+
+  let html='';
+  for(const tok of tokens){
+    if(/^\s+$/.test(tok.text)){ html+=tok.text; continue; }
+    // 이 토큰에 걸친 annotation 찾기
+    const ann=anns.find(a=>a.start<=tok.start&&a.end>=tok.end);
+    const isWord=/\w/.test(tok.text);
+    const wordAttr=isWord?` class="word" data-si="${sentIdx}" data-start="${tok.start}" data-end="${tok.end}" data-word="${esc(tok.text)}" onclick="onWordClick(event,${sentIdx},${tok.start},${tok.end},'${esc(tok.text)}')"  ondblclick="speakWord('${esc(tok.text)}')" title="더블클릭으로 발음"`:' ';
+    if(ann){
+      const cls=[ann.hlClass,ann.memo?'memo-span':'',!ann.hlClass&&ann.memo?'memo-only':''].filter(Boolean).join(' ');
+      const memoAttr=ann.memo?` data-memo="${ann.memo.replace(/&/g,'&amp;').replace(/"/g,'&quot;')}"`:'';
+      html+=`<span class="${cls}" data-ann-id="${ann.id}"${memoAttr} onclick="openHlPanelForAnn('${ann.id}')"><span${wordAttr}>${esc(tok.text)}</span></span>`;
+    } else {
+      html+=`<span${wordAttr}>${esc(tok.text)}</span>`;
+    }
+  }
+  return html;
+}
+
+// 단어 클릭 처리
+function onWordClick(e, si, start, end, word){
+  if(e.target.closest('[data-ann-id]')){
+    // annotation 클릭은 패널 열기로 처리
+    return;
+  }
+  e.stopPropagation();
+  const isCtrl=e.ctrlKey||e.metaKey;
+  const el=e.currentTarget;
+
+  if(!isCtrl){
+    // 기존 선택 해제
+    clearWordSelection();
+    selectedWords=[{si,start,end,word,el}];
+    el.classList.add('word-selected');
+  } else {
+    // Ctrl: 다중 선택 (같은 문장만)
+    const existing=selectedWords.findIndex(w=>w.si===si&&w.start===start);
+    if(existing>=0){
+      selectedWords[existing].el.classList.remove('word-selected');
+      selectedWords.splice(existing,1);
+    } else {
+      // 다른 문장이면 기존 해제 후 새로 선택
+      if(selectedWords.length&&selectedWords[0].si!==si) clearWordSelection();
+      selectedWords.push({si,start,end,word,el});
+      el.classList.add('word-selected');
+    }
+  }
+
+  if(selectedWords.length>0){
+    // 선택된 단어들로 hlSelection 설정
+    const sorted=selectedWords.slice().sort((a,b)=>a.start-b.start);
+    const sentIdx=sorted[0].si;
+    // 연속되지 않아도 전체 범위로 처리
+    hlSelection={sentIdx, start:sorted[0].start, end:sorted[sorted.length-1].end};
+    hlAnnId=null;
+    selectedColor='yellow';
+    hlMode='hl';
+    setHlMode('hl');
+    updateColorBtns();
+    document.getElementById('hlMemoInput').innerHTML='';
+    const rect=el.getBoundingClientRect();
+    positionHlPanel(rect.left+rect.width/2, rect.bottom+window.scrollY+8);
+  } else {
+    closeHlPanel();
+  }
+}
+
+function clearWordSelection(){
+  selectedWords.forEach(w=>w.el?.classList.remove('word-selected'));
+  selectedWords=[];
+}
+
+// TTS
+function speakWord(word){
+  if(!word)return;
+  const utt=new SpeechSynthesisUtterance(word);
+  utt.lang='en-US';
+  speechSynthesis.cancel();
+  speechSynthesis.speak(utt);
+}
+
+// 드래그 선택도 유지
 document.addEventListener('mouseup',e=>{
   if(e.target.closest('#hlPanel')||e.target.closest('.memo-tooltip'))return;
   const tag=e.target.tagName;
@@ -785,8 +943,12 @@ document.addEventListener('mouseup',e=>{
   const memorizeScreen=document.getElementById('memorizeScreen');
   if(!memorizeScreen.classList.contains('active')){closeHlPanel();return;}
   if(!document.getElementById('readTab').classList.contains('active'))return;
+
   const sel=window.getSelection();
-  if(!sel||sel.isCollapsed){closeHlPanel();return;}
+  if(!sel||sel.isCollapsed){
+    if(!e.target.closest('.word')) closeHlPanel();
+    return;
+  }
   const readEnEl=findReadEn(sel.anchorNode);
   if(!readEnEl){closeHlPanel();return;}
   const idx=parseInt(readEnEl.id.replace('readEn_',''));
@@ -795,13 +957,15 @@ document.addEventListener('mouseup',e=>{
   const s0=getTextOff(readEnEl,range.startContainer,range.startOffset);
   const s1=getTextOff(readEnEl,range.endContainer,range.endOffset);
   const start=Math.min(s0,s1),end=Math.max(s0,s1);
-  if(start>=end){closeHlPanel();return;}
+  if(start>=end)return;
+
+  clearWordSelection();
   hlSelection={sentIdx:idx,start,end};hlAnnId=null;
   const existing=(doc.annotations||[]).find(a=>a.sentIdx===idx&&a.start===start&&a.end===end);
-  if(existing){hlAnnId=existing.id;selectedHlClass=existing.hlClass||'hl-yellow';}
-  else selectedHlClass='hl-yellow';
-  updateColorBtns();
-  document.getElementById('hlMemoInput').value=existing?.memo||'';
+  if(existing){hlAnnId=existing.id;selectedColor=existing.hlClass?.replace(/^(hl|ul)-/,'')||'yellow';hlMode=existing.hlClass?.startsWith('ul-')?'ul':'hl';}
+  else{selectedColor='yellow';hlMode='hl';}
+  setHlMode(hlMode);updateColorBtns();
+  document.getElementById('hlMemoInput').innerHTML=existing?.memo||'';
   const rect=range.getBoundingClientRect();
   positionHlPanel(rect.left+rect.width/2,rect.bottom+window.scrollY+8);
 });
@@ -821,28 +985,33 @@ function getTextOff(root,targetNode,targetOffset){
 function positionHlPanel(cx,y){
   const panel=document.getElementById('hlPanel');
   panel.classList.remove('hidden');panel.style.position='absolute';
-  const pw=260;
+  const pw=290;
   const left=Math.min(Math.max(cx-pw/2,8),window.innerWidth-pw-8);
   panel.style.left=left+'px';panel.style.top=y+'px';
+  setTimeout(()=>document.getElementById('hlMemoInput').focus(),50);
 }
 function closeHlPanel(){
   document.getElementById('hlPanel').classList.add('hidden');
-  hlSelection=null;hlAnnId=null;window.getSelection()?.removeAllRanges();
+  hlSelection=null;hlAnnId=null;
+  clearWordSelection();
+  window.getSelection()?.removeAllRanges();
 }
-function selectColor(btn,cls){selectedHlClass=cls;updateColorBtns();}
+function selectColor(btn,color){selectedColor=color;updateColorBtns();}
 function updateColorBtns(){
-  document.querySelectorAll('.hl-color-btn').forEach(b=>b.classList.toggle('selected',b.dataset.cls===selectedHlClass));
+  document.querySelectorAll('.hl-color-btn').forEach(b=>b.classList.toggle('selected',b.dataset.cls===selectedColor));
 }
 function saveHL(){
   const doc=docs.find(d=>d.id===currentId);if(!doc||!hlSelection){closeHlPanel();return;}
   if(!doc.annotations)doc.annotations=[];
-  const memo=document.getElementById('hlMemoInput').value.trim();
+  const memoEl=document.getElementById('hlMemoInput');
+  const memo=memoEl.innerHTML.trim().replace(/<br\s*\/?>/gi,'\n');
+  const hlClass=getHlClass();
   if(hlAnnId){
     const ann=doc.annotations.find(a=>a.id===hlAnnId);
-    if(ann){ann.hlClass=selectedHlClass;ann.memo=memo;}
+    if(ann){ann.hlClass=hlClass;ann.memo=memo;}
   }else{
     doc.annotations=doc.annotations.filter(a=>!(a.sentIdx===hlSelection.sentIdx&&a.start<hlSelection.end&&a.end>hlSelection.start));
-    doc.annotations.push({id:uid(),sentIdx:hlSelection.sentIdx,start:hlSelection.start,end:hlSelection.end,hlClass:selectedHlClass,memo});
+    doc.annotations.push({id:uid(),sentIdx:hlSelection.sentIdx,start:hlSelection.start,end:hlSelection.end,hlClass,memo});
   }
   saveData();renderReadTab(doc);closeHlPanel();toast('저장됐어요 ✓');
 }
@@ -856,8 +1025,11 @@ function openHlPanelForAnn(annId){
   const doc=docs.find(d=>d.id===currentId);if(!doc)return;
   const ann=(doc.annotations||[]).find(a=>a.id===annId);if(!ann)return;
   hlAnnId=annId;hlSelection={sentIdx:ann.sentIdx,start:ann.start,end:ann.end};
-  selectedHlClass=ann.hlClass||'hl-yellow';updateColorBtns();
-  document.getElementById('hlMemoInput').value=ann.memo||'';
+  selectedColor=ann.hlClass?.replace(/^(hl|ul)-/,'')||'yellow';
+  hlMode=ann.hlClass?.startsWith('ul-')?'ul':ann.hlClass?'hl':'memo';
+  setHlMode(hlMode);updateColorBtns();
+  const memoEl=document.getElementById('hlMemoInput');
+  memoEl.innerHTML=ann.memo||'';
   const span=document.querySelector('[data-ann-id="'+annId+'"]');
   if(span){const rect=span.getBoundingClientRect();positionHlPanel(rect.left+rect.width/2,rect.bottom+window.scrollY+8);}
 }
@@ -866,7 +1038,7 @@ function openHlPanelForAnn(annId){
 document.addEventListener('mouseover',e=>{
   const span=e.target.closest('[data-memo]');
   const el=document.getElementById('memoTooltip');
-  if(span&&span.dataset.memo){el.textContent=span.dataset.memo;el.classList.remove('hidden');}
+  if(span&&span.dataset.memo){el.innerHTML=span.dataset.memo;el.classList.remove('hidden');}
   else el.classList.add('hidden');
 });
 document.addEventListener('mousemove',e=>{
