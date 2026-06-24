@@ -1253,7 +1253,7 @@ function blankInputKeyNav(e,el){
     }
     return;
   }
-  if(e.key==='Tab'||e.key==='Enter'){
+  if(e.key==='Tab'||e.key==='Enter' || e.key === ' '){
     e.preventDefault();
     const next=all[cur+(e.shiftKey?-1:1)];
     if(next)next.focus();
